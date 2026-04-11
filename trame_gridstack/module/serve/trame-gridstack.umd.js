@@ -62,12 +62,23 @@
       const config = { ...this.options, animate: this.animate };
       this.grid = global.GridStack.init(config, this.$refs.root);
 
-        const toPlainItems = (items) => {
+      const toPlainItems = (items) => {
         const list = Array.isArray(items) ? items : [];
+        const keys = [
+          "id", "x", "y", "w", "h", "minW", "minH", "maxW", "maxH", "locked", "noMove", "noResize",
+        ];
+
         return list.map((i) => {
-          if (!i) return i;
-          if (typeof i.toJSON === "function") return i.toJSON();
-          return { ...i };
+          if (!i) return null;
+
+          const src = typeof i.toJSON === "function" ? i.toJSON() : i;
+          const out = {};
+          keys.forEach((k) => {
+            if (src[k] !== undefined) {
+              out[k] = src[k];
+            }
+          });
+          return out;
         });
       };
 
