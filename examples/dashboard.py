@@ -3,7 +3,7 @@
 from trame.app import get_server
 from trame.ui.html import DivLayout
 from trame.widgets import html
-from trame_gridstack.widgets import GridStack, GridStackItem
+from trame_gridstack.widgets.gridstack import GridStack, GridStackItem
 
 server = get_server()
 state = server.state
