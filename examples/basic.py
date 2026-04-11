@@ -16,7 +16,6 @@ def on_layout_change(items):
 
 
 with DivLayout(server) as layout:
-    layout.title.set_text("trame-gridstack: basic")
 
     with GridStack(
         options={"column": 12, "cellHeight": 80, "margin": 8},

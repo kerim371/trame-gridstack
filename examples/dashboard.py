@@ -32,8 +32,6 @@ def add_widget():
 
 
 with DivLayout(server) as layout:
-    layout.title.set_text("trame-gridstack: dashboard")
-
     html.Button("Add widget", click=add_widget, style="margin-bottom: 8px;")
 
     with GridStack(options={"column": 12, "cellHeight": 70, "margin": 8}, style="height: 520px;"):
