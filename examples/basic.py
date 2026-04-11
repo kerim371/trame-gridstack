@@ -11,7 +11,9 @@ state = server.state
 state.layout_events = []
 
 
-def on_layout_change(items):
+def on_layout_change(items=None, **_):
+    if items is None:
+        items = []
     state.layout_events = items
 
 
@@ -20,7 +22,7 @@ with DivLayout(server) as layout:
     with GridStack(
         options={"column": 12, "cellHeight": 80, "margin": 8},
         style="height: 420px; background: #f5f5f5;",
-        change=on_layout_change,
+        change=(on_layout_change, "[$event]"),
     ):
         with GridStackItem(x=0, y=0, w=4, h=2, id="a"):
             html.Div("A", classes="pa-2", style="background: #dbeafe; height: 100%;")
