@@ -1,0 +1,396 @@
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a/MANIFEST.in b/MANIFEST.in
+new file mode 100644
+index 0000000000000000000000000000000000000000..51856711ce79f5326eedbd128bb1fbf2cd0aa31f
+--- /dev/null
++++ b/MANIFEST.in
+@@ -0,0 +1,2 @@
++include README.md
++recursive-include trame_gridstack/module/serve *
+diff --git a/README.md b/README.md
+index 81cd6773eee4d879843c8ae64e6f6020018a9158..3071938d87389bfd759fb3cad020016b5e2856b7 100644
+GIT binary patch
+literal 2095
+zcma)7?~dC<5dZF{7$rhV)Wo?S2&z>109V9ap;c)L{ZOHLZO_F+*1Oj3I*E&rcnF@5
+zCt-Hi@tHf&5h=EJ=ihIBGdnv4XGD$5ouSe?QS6f>ySI}8SrA}rAtgj%21hD)=s;3#
+zgz12kZOC8=d6#?`Iao^3>DFbx%qr&^yI!q!<f=AL3tg|iCwCMES9kGx_4xww*72XD
+z1E-<2n0)w-5pF%gk*_o8Uu|$WhgOwnz*Pv9)@7O`(<!{Kx_=~f#uU@q859nvL;<(j
+zKq+jMYhlWzq&>n<H#TA+*0JD-Q)ECtw+NSM@~+~&h9QX^!XB{+JW)+j7<kjUN~@)1
+z*HGdCrEVA+p7=?q3WQ@t68(m@q;@dmmqczkTE)nY+U%KaS3#{gHx=szGY{c&2ql}x
+zJZ}`Qq!f;{;)Js-=UkG88ebhRiKe4cvrb^>$Ciq{_hno#Yy$M;*62Fgq@rOjb)$^~
+zF8fD|=746b&{A5tTAr0&(BX$r`LWJ9uilZ@ABjH>EtuX@9GF?$k#ys*PLhZNHX~58
+zdBOxTT?2$!)S9mo;9rmp9%s7oblJ^slS0e3R+BY6y<EVgKq;@0c9r9uXBWIv3$r6H
+zfA;%=x#}ctCRNZ_!xxtq&FT515AiUJM>{)h*iGjj$IX`us5Tsj%FRTK?YylgCS~}u
+z$s3_i!q<}r0iRx6eD)l2ZoQq+-1KXhmN|-BWDrTn^FKjw=zjr`KL+BP{|BPDE%2)V
+zBC?)_uHvGcd+kbd8!1%I`qrC5Hq?T9@s%J2g;tK=Xi~TdEhm(N#^}bb_!zO_I!Tt0
+z^_9zDmX%bvYz}|@@#kHGKrd%;tZcS`?5?VQ6)VbLX`0TxOQEP14!z4<YuUR*C31<Y
+zlB|D2RPtwxEs9F09UBB-0f4~*>3|kEe-e^D@x+K)B@nlPg>bBftV7(g#PTsG!Yf4=
+z-o{|9506{*YQ5b(#(i5d>sLI8qG#s5ug(MR1L=NL`SY@}oYxw%lc%xskE4H786)HJ
+zS)S<R3&k9hdhbR2z7B73ifeJY_S!jC;y~K4s?^1v6Jlkh-=dEYzh7~lUX=%_a^yNz
+zr7{k#Z%?9bByuZl5h25VxyoXT3~Qc*RHRLpg%WW~Iw~MuP4J}uSjH+r!IRP-EKl;_
+zV7L|rCuOHZ&0fy4>Ocar!;<e1hW55qJlG>PhBD0JFjoi3>I^H11NTla4mX^f*V_3^
+zm!lqkxm{gtx4@SuNG*JSgyy<>@f!H*FfH>{W6CD)_(nWmR9v05a4p-^WQ;b}SH0Hi
+V-rc_B`=;f7=X&~6=ci<v{0$Lb%&Y(a
+
+literal 40
+tcmezWPnki1p@gA`A(0`MA(cUwAsxuhWJqBs28t#!Br{|)@G@{Q007XM2wDID
+
+diff --git a/examples/basic.py b/examples/basic.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..44db78b8198069b09710b19a4a728fb6b2664592
+--- /dev/null
++++ b/examples/basic.py
+@@ -0,0 +1,39 @@
++"""Basic trame-gridstack example."""
++
++from trame.app import get_server
++from trame.ui.html import DivLayout
++from trame.widgets import html
++from trame_gridstack.widgets import GridStack, GridStackItem
++
++server = get_server()
++state = server.state
++
++state.layout_events = []
++
++
++def on_layout_change(items):
++    state.layout_events = items
++
++
++with DivLayout(server) as layout:
++    layout.title.set_text("trame-gridstack: basic")
++
++    with GridStack(
++        options={"column": 12, "cellHeight": 80, "margin": 8},
++        style="height: 420px; background: #f5f5f5;",
++        change=on_layout_change,
++    ):
++        with GridStackItem(x=0, y=0, w=4, h=2, id="a"):
++            html.Div("A", classes="pa-2", style="background: #dbeafe; height: 100%;")
++
++        with GridStackItem(x=4, y=0, w=4, h=3, id="b"):
++            html.Div("B", classes="pa-2", style="background: #dcfce7; height: 100%;")
++
++        with GridStackItem(x=8, y=0, w=4, h=1, id="c"):
++            html.Div("C", classes="pa-2", style="background: #fee2e2; height: 100%;")
++
++    html.Pre("{{ layout_events }}", style="margin-top: 16px; font-size: 12px;")
++
++
++if __name__ == "__main__":
++    server.start()
+diff --git a/examples/dashboard.py b/examples/dashboard.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..313d9a0acb2558096496cb5e83153387b3c6de77
+--- /dev/null
++++ b/examples/dashboard.py
+@@ -0,0 +1,48 @@
++"""Dashboard-like trame-gridstack example with dynamic updates."""
++
++from trame.app import get_server
++from trame.ui.html import DivLayout
++from trame.widgets import html
++from trame_gridstack.widgets import GridStack, GridStackItem
++
++server = get_server()
++state = server.state
++
++state.widgets = [
++    {"id": "sales", "title": "Sales", "x": 0, "y": 0, "w": 6, "h": 2, "color": "#e0f2fe"},
++    {"id": "ops", "title": "Ops", "x": 6, "y": 0, "w": 6, "h": 2, "color": "#fef3c7"},
++    {"id": "alerts", "title": "Alerts", "x": 0, "y": 2, "w": 12, "h": 2, "color": "#fee2e2"},
++]
++
++
++def add_widget():
++    index = len(state.widgets) + 1
++    state.widgets = [
++        *state.widgets,
++        {
++            "id": f"extra-{index}",
++            "title": f"Extra #{index}",
++            "x": 0,
++            "y": 99,
++            "w": 4,
++            "h": 1,
++            "color": "#dcfce7",
++        },
++    ]
++
++
++with DivLayout(server) as layout:
++    layout.title.set_text("trame-gridstack: dashboard")
++
++    html.Button("Add widget", click=add_widget, style="margin-bottom: 8px;")
++
++    with GridStack(options={"column": 12, "cellHeight": 70, "margin": 8}, style="height: 520px;"):
++        with html.Template(v_for="w in widgets", key="w.id"):
++            with GridStackItem(x=("w.x",), y=("w.y",), w=("w.w",), h=("w.h",), id=("w.id",)):
++                with html.Div(style=("`background:${w.color};height:100%;padding:8px;`",)):
++                    html.H4("{{ w.title }}", style="margin: 0;")
++                    html.Div("id: {{ w.id }}")
++
++
++if __name__ == "__main__":
++    server.start()
+diff --git a/pyproject.toml b/pyproject.toml
+new file mode 100644
+index 0000000000000000000000000000000000000000..b6dab8d0bcfba98b7e16ef1128017b8b0febc098
+--- /dev/null
++++ b/pyproject.toml
+@@ -0,0 +1,34 @@
++[build-system]
++requires = ["setuptools>=61", "wheel"]
++build-backend = "setuptools.build_meta"
++
++[project]
++name = "trame-gridstack"
++version = "0.1.0"
++description = "GridStack widgets for trame, inspired by trame-grid-layout"
++readme = "README.md"
++requires-python = ">=3.9"
++license = { text = "MIT" }
++authors = [
++  { name = "trame-gridstack contributors" }
++]
++keywords = ["trame", "gridstack", "dashboard", "vue"]
++classifiers = [
++  "License :: OSI Approved :: MIT License",
++  "Programming Language :: Python :: 3",
++  "Programming Language :: Python :: 3 :: Only",
++]
++dependencies = [
++  "trame-client>=2.11",
++]
++
++[project.urls]
++Homepage = "https://github.com/Kitware/trame-grid-layout"
++Repository = "https://github.com/Kitware/trame-grid-layout"
++
++[tool.setuptools]
++include-package-data = true
++
++[tool.setuptools.packages.find]
++where = ["."]
++include = ["trame_gridstack*"]
+diff --git a/trame_gridstack/__init__.py b/trame_gridstack/__init__.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..0e48cce5158f6629709e0374cee7d32594d294ff
+--- /dev/null
++++ b/trame_gridstack/__init__.py
+@@ -0,0 +1,5 @@
++"""trame-gridstack package."""
++
++from .module import setup
++
++__all__ = ["setup"]
+diff --git a/trame_gridstack/module/__init__.py b/trame_gridstack/module/__init__.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..35a74992caeab6068b578b2407a339d541df8b2f
+--- /dev/null
++++ b/trame_gridstack/module/__init__.py
+@@ -0,0 +1,24 @@
++"""Module definition to serve frontend assets."""
++
++from pathlib import Path
++
++serve_path = Path(__file__).parent / "serve"
++
++serve = {
++    "trame-gridstack": serve_path,
++}
++
++scripts = [
++    "trame-gridstack/trame-gridstack.umd.js",
++]
++
++vue_use = [
++    "TrameGridStack",
++]
++
++
++def setup(server):
++    """Enable trame-gridstack assets on the provided server."""
++    from trame_gridstack import module
++
++    server.enable_module(module)
+diff --git a/trame_gridstack/module/serve/trame-gridstack.umd.js b/trame_gridstack/module/serve/trame-gridstack.umd.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..ee3b0811ea53e0ab1144f50b8455623b49c215b8
+--- /dev/null
++++ b/trame_gridstack/module/serve/trame-gridstack.umd.js
+@@ -0,0 +1,134 @@
++(function (global) {
++  const GRIDSTACK_JS = "https://cdn.jsdelivr.net/npm/gridstack@10.3.1/dist/gridstack-all.js";
++  const GRIDSTACK_CSS = "https://cdn.jsdelivr.net/npm/gridstack@10.3.1/dist/gridstack.min.css";
++
++  function loadScript(src) {
++    return new Promise((resolve, reject) => {
++      const existing = document.querySelector(`script[src=\"${src}\"]`);
++      if (existing) {
++        existing.addEventListener("load", () => resolve(), { once: true });
++        if (existing.dataset.loaded === "1") {
++          resolve();
++        }
++        return;
++      }
++      const el = document.createElement("script");
++      el.src = src;
++      el.async = true;
++      el.onload = () => {
++        el.dataset.loaded = "1";
++        resolve();
++      };
++      el.onerror = reject;
++      document.head.appendChild(el);
++    });
++  }
++
++  function loadCss(href) {
++    const existing = document.querySelector(`link[href=\"${href}\"]`);
++    if (existing) {
++      return;
++    }
++    const el = document.createElement("link");
++    el.rel = "stylesheet";
++    el.href = href;
++    document.head.appendChild(el);
++  }
++
++  const GridStackComponent = {
++    name: "TrameGridStack",
++    props: {
++      options: {
++        type: Object,
++        default: () => ({}),
++      },
++      animate: {
++        type: Boolean,
++        default: true,
++      },
++    },
++    emits: ["change", "added", "removed"],
++    template: `<div class=\"grid-stack\" ref=\"root\"><slot /></div>`,
++    data() {
++      return {
++        grid: null,
++      };
++    },
++    async mounted() {
++      loadCss(GRIDSTACK_CSS);
++      await loadScript(GRIDSTACK_JS);
++      await this.$nextTick();
++
++      const config = { ...this.options, animate: this.animate };
++      this.grid = global.GridStack.init(config, this.$refs.root);
++
++      this.grid.on("change", (_event, items) => {
++        this.$emit("change", items.map((i) => i ? i.toJSON() : i));
++      });
++      this.grid.on("added", (_event, items) => {
++        this.$emit("added", items.map((i) => i ? i.toJSON() : i));
++      });
++      this.grid.on("removed", (_event, items) => {
++        this.$emit("removed", items.map((i) => i ? i.toJSON() : i));
++      });
++    },
++    beforeUnmount() {
++      if (this.grid) {
++        this.grid.destroy(false);
++        this.grid = null;
++      }
++    },
++  };
++
++  const GridStackItemComponent = {
++    name: "TrameGridItem",
++    props: {
++      x: { type: Number, default: 0 },
++      y: { type: Number, default: 0 },
++      w: { type: Number, default: 1 },
++      h: { type: Number, default: 1 },
++      minW: { type: Number, default: undefined },
++      minH: { type: Number, default: undefined },
++      maxW: { type: Number, default: undefined },
++      maxH: { type: Number, default: undefined },
++      id: { type: [String, Number], default: undefined },
++      locked: { type: Boolean, default: false },
++      noResize: { type: Boolean, default: false },
++      noMove: { type: Boolean, default: false },
++    },
++    computed: {
++      attrs() {
++        return {
++          "gs-x": this.x,
++          "gs-y": this.y,
++          "gs-w": this.w,
++          "gs-h": this.h,
++          "gs-min-w": this.minW,
++          "gs-min-h": this.minH,
++          "gs-max-w": this.maxW,
++          "gs-max-h": this.maxH,
++          "gs-id": this.id,
++          "gs-locked": this.locked,
++          "gs-no-resize": this.noResize,
++          "gs-no-move": this.noMove,
++        };
++      },
++    },
++    template: `
++      <div class=\"grid-stack-item\" v-bind=\"attrs\">
++        <div class=\"grid-stack-item-content\"><slot /></div>
++      </div>
++    `,
++  };
++
++  const TrameGridStack = {
++    install(app) {
++      app.component("trame-grid-stack", GridStackComponent);
++      app.component("trame-grid-item", GridStackItemComponent);
++    },
++  };
++
++  if (global.Vue && global.Vue.createApp) {
++    global.TrameGridStack = TrameGridStack;
++  }
++})(window);
+diff --git a/trame_gridstack/widgets/__init__.py b/trame_gridstack/widgets/__init__.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..3c26fff21bdbf73a4439437870d6565bc179e65a
+--- /dev/null
++++ b/trame_gridstack/widgets/__init__.py
+@@ -0,0 +1,3 @@
++from .gridstack import GridStack, GridStackItem
++
++__all__ = ["GridStack", "GridStackItem"]
+diff --git a/trame_gridstack/widgets/gridstack.py b/trame_gridstack/widgets/gridstack.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..04d52bf6dcca4775c4eb401405dddd93c48d2b89
+--- /dev/null
++++ b/trame_gridstack/widgets/gridstack.py
+@@ -0,0 +1,21 @@
++"""Python widget wrappers for trame-gridstack components."""
++
++from trame_client.widgets.core import AbstractElement
++
++from trame_gridstack import module
++
++
++class GridStack(AbstractElement):
++    """Main GridStack container."""
++
++    def __init__(self, children=None, **kwargs):
++        super().__init__("trame-grid-stack", children, **kwargs)
++        self.server.enable_module(module)
++
++
++class GridStackItem(AbstractElement):
++    """Single GridStack item."""
++
++    def __init__(self, children=None, **kwargs):
++        super().__init__("trame-grid-item", children, **kwargs)
++        self.server.enable_module(module)
+ 
+EOF
+)
