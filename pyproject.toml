@@ -19,6 +19,7 @@ classifiers = [
   "Programming Language :: Python :: 3 :: Only",
 ]
 dependencies = [
+  "trame>=3.0",
   "trame-client>=2.11",
 ]
 
