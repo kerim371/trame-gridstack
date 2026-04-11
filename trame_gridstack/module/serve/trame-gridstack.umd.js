@@ -62,14 +62,23 @@
       const config = { ...this.options, animate: this.animate };
       this.grid = global.GridStack.init(config, this.$refs.root);
 
+        const toPlainItems = (items) => {
+        const list = Array.isArray(items) ? items : [];
+        return list.map((i) => {
+          if (!i) return i;
+          if (typeof i.toJSON === "function") return i.toJSON();
+          return { ...i };
+        });
+      };
+
       this.grid.on("change", (_event, items) => {
-        this.$emit("change", items.map((i) => i ? i.toJSON() : i));
+        this.$emit("change", toPlainItems(items));
       });
       this.grid.on("added", (_event, items) => {
-        this.$emit("added", items.map((i) => i ? i.toJSON() : i));
+        this.$emit("added", toPlainItems(items));
       });
       this.grid.on("removed", (_event, items) => {
-        this.$emit("removed", items.map((i) => i ? i.toJSON() : i));
+        this.$emit("removed", toPlainItems(items));
       });
     },
     beforeUnmount() {
