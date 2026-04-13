@@ -47,6 +47,18 @@ with SinglePageLayout(server) as layout:
     with layout.content:
         html.Style(
             """
+            .outer-grid {
+              background: #f1f5f9;
+              border: 1px solid #cbd5e1;
+              border-radius: 10px;
+              padding: 6px;
+              box-sizing: border-box;
+            }
+            .outer-grid > .grid-stack-item > .grid-stack-item-content {
+              background: #eef2ff;
+              border: 1px solid #c7d2fe;
+              border-radius: 10px;
+            }
             .outer-widget {
               height: 100%;
               background: #eef2ff;
@@ -58,6 +70,11 @@ with SinglePageLayout(server) as layout:
             .outer-widget > .grid-stack {
               height: 100%;
               min-height: 100%;
+            }
+            .inner-grid > .grid-stack-item > .grid-stack-item-content {
+              background: #e0e7ff;
+              border: 1px solid #6366f1;
+              border-radius: 8px;
             }
             .inner-card {
               height: 100%;
@@ -76,12 +93,14 @@ with SinglePageLayout(server) as layout:
         with GridStack(
             options={"column": 12, "cellHeight": 80, "margin": 8},
             style="height: calc(100vh - 88px); background: #f8fafc;",
+            classes="outer-grid",
         ):
             with GridStackItem(x=0, y=0, w=12, h=4, id="container"):
                 with html.Div(classes="outer-widget"):
                     with GridStack(
-                        options={"column": 3, "cellHeight": "auto", "margin": 6},
+                        options={"column": 3, "cellHeight": 100, "margin": 6},
                         style="height: 100%;",
+                        classes="inner-grid",
                         change=(on_inner_change, "[$event]"),
                     ):
                         with html.Template(v_for="item in inner_items", key="item.id"):
