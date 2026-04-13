@@ -9,7 +9,7 @@ Inside that widget there is a nested grid with 3 items in one row:
 
 from trame.app import get_server
 from trame.ui.vuetify3 import SinglePageLayout
-from trame.widgets import html
+from trame.widgets import html, vuetify3
 
 from trame_gridstack.widgets.gridstack import GridStack, GridStackItem
 
@@ -76,6 +76,12 @@ with SinglePageLayout(server) as layout:
               border: 1px solid #6366f1;
               border-radius: 8px;
             }
+            .inner-v-card {
+              width: 100%;
+              height: 100%;
+              background: #ffffff !important;
+              border: 1px solid #cbd5e1;
+            }
             .inner-card {
               height: 100%;
               display: flex;
@@ -91,14 +97,14 @@ with SinglePageLayout(server) as layout:
         )
 
         with GridStack(
-            options={"column": 12, "cellHeight": 80, "margin": 8},
+            options={"column": 12, "cellHeight": 80, "margin": 8, "disableOneColumnMode": True},
             style="height: calc(100vh - 88px); background: #f8fafc;",
             classes="outer-grid",
         ):
             with GridStackItem(x=0, y=0, w=12, h=4, id="container"):
                 with html.Div(classes="outer-widget"):
                     with GridStack(
-                        options={"column": 3, "cellHeight": 100, "margin": 6},
+                        options={"column": 3, "cellHeight": 100, "margin": 6, "disableOneColumnMode": True, "float": True},
                         style="height: 100%;",
                         classes="inner-grid",
                         change=(on_inner_change, "[$event]"),
@@ -116,7 +122,9 @@ with SinglePageLayout(server) as layout:
                                 maxH=1,
                                 noResize=True,
                             ):
-                                html.Div("{{ item.label }}", classes="inner-card")
+                                with vuetify3.VCard(classes="inner-v-card", elevation=2, rounded="lg"):
+                                    with vuetify3.VCardText(classes="inner-card"):
+                                        html.Div("{{ item.label }}")
 
 
 if __name__ == "__main__":
